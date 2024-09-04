@@ -8,12 +8,12 @@ public class Main {
         String filename = args[0];
         if (args.length > 2) {
             System.out.println("ERROR: more than one flag present. Highest priority flag will be implemented");
-            HashSet <String> commandset = new HashSet<String>(args);
-            if (commandset.contains("-h")) {
+            // HashSet <String> commandset = new HashSet<String>(args);
+            if (args.contains("-h")) {
                 h_flag();
-            } else if (commandset.contains("-r")) {
+            } else if (args.contains("-r")) {
                 r_flag();
-            } else if (commandset.contains("-p")) {
+            } else if (args.contains("-p")) {
                 p_flag();
             } else {
                 s_flag();
