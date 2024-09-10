@@ -15,18 +15,17 @@ def s_flag(filename):
     print("S flag flagged")
     scanner = Scanner(filename)
     scanner.readLine()
-    print(scanner.readWord())
-    print(scanner.readWord())
-    # while (nextWord = scanner.readWord() != 9):
-    #     print(nextWord)
-    #     nextWord = scanner.readWord()
+    nextWord = scanner.readWord()
+    while nextWord[0] != 9:
+        print(nextWord)
+        nextWord = scanner.readWord()
 
 def p_flag():
-    System.out.println("P flag worked")
+    print("P flag worked")
 
 
 def r_flag():
-    System.out.println("R flag worked")
+    print("R flag worked")
     
 
 def main ():
