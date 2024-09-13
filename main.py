@@ -16,7 +16,7 @@ def s_flag(filename):
     scanner = Scanner(filename)
     scanner.readLine()
     nextWord = scanner.readWord()
-    while nextWord[0] != 9:
+    while nextWord != (9,'EOF'):
         print(nextWord)
         nextWord = scanner.readWord()
 
