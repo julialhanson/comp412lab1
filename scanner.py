@@ -150,7 +150,8 @@ class Scanner():
                         return self.handleError()
                 else:
                     return self.handleError()
-            else:
+            elif ord(self.line[self.i]) >= 48 and ord(self.line[self.i]) <= 57:
+                print("CHAR IS " + self.line[self.i])
                 regstr = ""
                 while self.i < len(self.line) and (ord(self.line[self.i]) >= 48 and ord(self.line[self.i]) <= 57):
                     regstr = regstr + self.line[self.i]
@@ -161,7 +162,11 @@ class Scanner():
                 elif(self.line[self.i].isspace()):
                     return(REGISTER, int(regstr))
                 else:
-                    return self.handleError()
+                    print("BREAK 1")
+                    return self.handleError("Register Error")
+            else:
+                print("BREAK 2")
+                return self.handleError()
         elif self.line[self.i] == 'm':
             if self.line[self.i] == 'u':
                 self.i += 1
@@ -187,6 +192,7 @@ class Scanner():
                     if self.line[self.i].isspace():
                         return (ARITHOP, ADD)
                     else:
+                        print("add error")
                         return self.handleError()
                 else:
                     return self.handleError()
@@ -232,6 +238,7 @@ class Scanner():
             else:
                 return self.handleError()
         elif self.line[self.i] == '=':
+            print("goes into equal")
             self.i += 1
             if self.line[self.i] == '>':
                 self.i += 1
@@ -240,6 +247,7 @@ class Scanner():
             else:
                 return self.handleError()
         elif self.line[self.i] == ',':
+            print("goes into comma")
             self.i += 1
             if self.line[self.i].isspace():
                 return (COMMA, COMMA)
@@ -257,16 +265,18 @@ class Scanner():
             return (EOL, EOL) 
         elif self.line[self.i] == ' ':
             self.i += 1
-        elif ord(self.line[self.i]) <= 57 and ord(self.line[self.i]) >= 47:
+        elif ord(self.line[self.i]) <= 57 and ord(self.line[self.i]) >= 48:
             constr = ""
-            while ord(self.line[self.i]) <= 57 and ord(self.line[self.i]) >= 47:
+            while ord(self.line[self.i]) <= 57 and ord(self.line[self.i]) >= 48:
                 constr = constr + self.line[self.i]
                 self.i += 1
             if self.line[self.i].isspace():
                 return (CONSTANT, int(constr))   
             else:
+                print("Constant testing broke at char " + self.line[self.i])
                 return self.handleError()                 
         else:
+            print("error char = " + self.line[self.i])
             return self.handleError()
     # if(self.i == len(self.line)):
     #     self.readLine()
@@ -277,4 +287,5 @@ class Scanner():
         self.readLine()
         errorMessage = "ERROR"
         return (11, errorMessage)
+    
     
