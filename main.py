@@ -1,6 +1,33 @@
 from sys import argv
 from scanner import Scanner
 
+# Constants from other file
+SUB = 3
+STORE = 4
+LOAD = 5
+# INTO, COMMA, EOL, EOF shared
+LSHIFT = 10
+RSHIFT = 14
+MULT = 12
+ADD = 13
+
+# add constant category that is just number
+
+LOADI = 0
+NOP = 1
+OUTPUT = 2
+ARITHOP = 3
+MEMOP = 4
+CONSTANT = 5
+INTO = 6
+COMMA = 7
+EOL = 8
+EOF = 9
+REGISTER = 10
+COMMENT = 11
+
+ERROR = -1
+
 def h_flag(filename):
     print("Valid Command Line Arguments:")
     print("\n")
@@ -17,7 +44,10 @@ def s_flag(filename):
     scanner.readLine()
     nextWord = scanner.readWord()
     while nextWord != (9,'EOF'):
-        print(nextWord)
+        if (nextWord[0] == CONSTANT or nextWord[0] == REGISTER):
+            print("[" + scanner.categoryArr[nextWord[0]] + ", " + str(nextWord[1]) + "]")
+        elif (nextWord[0] != ERROR):
+            print("[" + scanner.categoryArr[nextWord[0]] + ", " + scanner.wordArr[nextWord[1]] + "]")
         nextWord = scanner.readWord()
 
 def p_flag():
