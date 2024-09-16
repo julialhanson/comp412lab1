@@ -12,7 +12,7 @@ STORE = 4
 LOAD = 5
 # INTO, COMMA, EOL, EOF shared
 LSHIFT = 10
-RSHIFT = 11
+RSHIFT = 14
 MULT = 12
 ADD = 13
 
@@ -39,6 +39,7 @@ okEndChars = ['\n', '/']
 class Scanner():
     def __init__(self, filename):
         self.filename = filename
+        self.eof = False
         self.buffer = open(filename, "r", encoding="utf-8")
         self.line = ""
         self.i = 0
@@ -47,15 +48,21 @@ class Scanner():
         self.wordArr = ["loadI", "nop", "output", "sub", "store", "load", "=>", ',', "\\n",  "", "lshift", "COMMENT", "mult", "add", "rshift"]
         self.categoryArr = ["LOADI", "NOP", "OUTPUT", "ARITHOP", "MEMOP",  "CONSTANT", "INTO", "COMMA", "EOL", "EOF", "REGISTER", "COMMENT"]
         pass
+    
+    def getLine(self):
+        return self.linenum
+    
+    def getEOF(self):
+        return self.eof
 
     def readLine(self):
         self.line = self.buffer.readline()
+        if (len(self.line) == 0 or self.line[-1] != '\n'):
+            self.line += (ascii(7))
         self.linenum += 1
         self.i = 0
         
     def readWord(self):
-        if(len(self.line) == 0):
-            return (9, "EOF") 
         
         while (self.line[self.i].isspace()):
             if (self.line[self.i] == '\n'):
@@ -71,6 +78,10 @@ class Scanner():
                     self.readLine()
                     return (ERROR, ERROR)
             self.i += 1
+        
+        if(self.line[self.i] == ascii(7)):
+            self.eof = True
+            return (EOF, EOF) 
         
         word = ""
         

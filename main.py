@@ -29,136 +29,198 @@ COMMENT = 11
 
 ERROR = -1
 
+errorflag = False
+wordArr = ["loadI", "nop", "output", "sub", "store", "load", "=>", ',', "\\n",  "", "lshift", "COMMENT", "mult", "add", "rshift"]
+
 
 class IRNode:
-    def __init__(self, opcode, sr1, sr2, sr3) -> None:
-        self.opcode = opcode
+    def __init__(self, linenum, sr1: int = None, sr2: int = None, sr3: int = None) -> None:
+        self.linenum = linenum
+        self.opcode = 0
         self.sr1 = sr1
         self.sr2 = sr2
         self.sr3 = sr3
-        self.prev = None
-        self.next = None
-        
+        self.prev = self
+        self.next = self
         pass
-def parseLine(linelst):
+    
+    def getOpcode(self):
+        return self.opcode
+    
+    def insertAfter(self, node):
+        self.next.prev = node
+        node.next = self.next
+        node.prev = self
+        self.next = node
+        
+    def __str__(self) -> str:
+        return f"{wordArr[self.opcode]}     [{self.sr1}], [{self.sr2}], [{self.sr3}]"
+        pass
+        
+def parseLine(scanner):
     word = scanner.readWord()
     
-    while word != (9, "EOF"):
-        opcode = ""
-        sr1 = ""
-        sr2 = ""
-        sr3 = ""
-        if word[0] == MEMOP:
-            opcode = Scanner.categoryArr[word[1]]
-            word = Scanner.readWord()
-            if word[0] == REGISTER:
-                self.sr1 = "sr" + str(word[1])
-                word = Scanner.readWord()
-                if word[0] == INTO:
-                    word = Scanner.readWord()
-                    if word[0] == REGISTER:
-                        self.sr3 = "sr" + str(word[1])
-                        word = Scanner.readWord()
-                        if word[0] == EOL:
-                            newIR = IRNode(opcode, sr1, sr2, sr3)
-                            return (opcode, sr1, sr2, sr3)
-                        else:
-                            print("ERROR: Extra words in " + str(opcode) + " operation")
-                            return(ERROR, ERROR)
+    while word[0] == EOL:
+        word = scanner.readWord()
+        
+    node = IRNode(scanner.getLine())
+    
+    if word[0] == MEMOP:
+        node.opcode = word[1]
+        word = scanner.readWord()
+        if word[0] == REGISTER:
+            node.sr1 = word[1]
+            word = scanner.readWord()
+            if word[0] == INTO:
+                word = scanner.readWord()
+                if word[0] == REGISTER:
+                    node.sr3 = word[1]
+                    word = scanner.readWord()
+                    if word[0] == EOL:
+                        return node
                     else:
-                        print("ERROR: Missing second source register in " + str(opcode))
-                        return(ERROR, ERROR)
+                        print("ERROR " + str(node.linenum) + ": Extra words in " + scanner.wordArr[node.opcode] + " operation")
+                        node.opcode = ERROR
+                        errorFlag = True
+                        return node
                 else:
-                    print("ERROR: Missing '=>' in " + str(opcode))
-                    return(ERROR, ERROR)
+                    print("ERROR " + str(node.linenum) + ": Missing second source register in " + scanner.wordArr[node.opcode])
+                    node.opcode = ERROR
+                    errorFlag = True
+                    return node
             else:
-                print("ERROR: missing first source register in " + str(opcode))
-                return(ERROR, ERROR)
-        elif word[0] == LOADI:
-            opcode = Scanner.categoryArr[word[1]]
-            word = Scanner.readWord()
-            if word[0] == CONSTANT:
-                sr1 = "val " + str(word[1])
-                word = Scanner.readWord()
-                if word[0] == INTO:
-                    word = Scanner.readWord()
-                    if word[0] == REGISTER:
-                        sr3 = "sr" + str(word[1])
-                        word = Scanner.readWord()
-                        if word[0] == EOL:
-                            return (opcode, sr1, sr2, sr3)
-                        else:
-                            print("ERROR: Extra words in " + str(opcode) + " operation")
-                            return(ERROR, ERROR)
+                print("ERROR " + str(node.linenum) + ":  Missing '=>' in " + scanner.wordArr[node.opcode])
+                node.opcode = ERROR
+                errorFlag = True
+                return node
+        else:
+            print("ERROR " + str(node.linenum) + ": missing first source register in " + scanner.wordArr[node.opcode])
+            node.opcode = ERROR
+            errorFlag = True
+            return node
+    elif word[0] == LOADI:
+        node.opcode = word[1]
+        word = scanner.readWord()
+        if word[0] == CONSTANT:
+            node.sr1 = word[1]
+            word = scanner.readWord()
+            if word[0] == INTO:
+                word = scanner.readWord()
+                if word[0] == REGISTER:
+                    node.sr3 = word[1]
+                    word = scanner.readWord()
+                    if word[0] == EOL:
+                        return (node)
                     else:
-                        print("ERROR: Missing second source register in " + str(opcode))
-                        return(ERROR, ERROR)
+                        print("ERROR " + str(node.linenum) + ": Extra words in " + scanner.wordArr[node.opcode] + " operation")
+                        node.opcode = ERROR
+                        errorFlag = True
+                        return node
                 else:
-                    print("ERROR: Missing '=>' in " + str(opcode))
-                    return(ERROR, ERROR)
+                    print("ERROR " + str(node.linenum) + ": Missing second source register in " + scanner.wordArr[node.opcode])
+                    node.opcode = ERROR
+                    errorFlag = True
+                    return node
             else:
-                print("ERROR: missing first source register in " + str(opcode))
-                return(ERROR, ERROR)
-        elif word[0] == ARITHOP:
-            opcode = Scanner.categoryArr[word[1]]
-            word = Scanner.readWord()
-            if word[0] == REGISTER:
-                sr1 = "sr" + str(word[1])
-                word = Scanner.readWord()
-                if word[0] == COMMA:
-                    word = Scanner.readWord()
-                    if word[0] == REGISTER:
-                        sr2 = "sr" + str(word[1])
-                        word = Scanner.readWord()
-                        if word[0] == INTO:
-                            word = Scanner.readWord()
-                            if word[0] == REGISTER:
-                                sr3 = "sr" + str(word[1])
-                                word = Scanner.readWord()
-                                if word[0] == EOL:
-                                    return (opcode, sr1, sr2, sr3)
-                                else:
-                                    print("ERROR: Extra words in " + str(self.opcode) + " operation")
-                                    return(ERROR, ERROR)
+                print("ERROR " + str(node.linenum) + ": Missing '=>' in " + scanner.wordArr[node.opcode])
+                node.opcode = ERROR
+                errorFlag = True
+                return node
+        else:
+            print("ERROR " + str(node.linenum) + ": missing first source register in " + scanner.wordArr[node.opcode])
+            node.opcode = ERROR
+            errorFlag = True
+            return node
+    elif word[0] == ARITHOP:
+        node.opcode = word[1]
+        word = scanner.readWord()
+        if word[0] == REGISTER:
+            node.sr1 = word[1]
+            word = scanner.readWord()
+            if word[0] == COMMA:
+                word = scanner.readWord()
+                if word[0] == REGISTER:
+                    node.sr2 = word[1]
+                    word = scanner.readWord()
+                    if word[0] == INTO:
+                        word = scanner.readWord()
+                        if word[0] == REGISTER:
+                            node.sr3 = word[1]
+                            word = scanner.readWord()
+                            if word[0] == EOL:
+                                return (node)
                             else:
-                                print("ERROR: Missing third source register in +" + opcode)
-                                return(ERROR, ERROR)
+                                print("ERROR " + str(node.linenum) + ": Extra words in " + scanner.wordArr[node.opcode] + " operation")
+                                node.opcode = ERROR
+                                errorFlag = True
+                                return node
                         else:
-                            print("ERROR: Missing '=>' in " + opcode)
-                            return(ERROR, ERROR)
+                            print("ERROR " + str(node.linenum) + ": Missing third source register in +" + scanner.wordArr[node.opcode])
+                            node.opcode = ERROR
+                            errorFlag = True
+                            return node
                     else:
-                        print("ERROR: Missing second source register in" + opcode)
-                        return(ERROR, ERROR)
+                        print("ERROR " + str(node.linenum) + ": Missing '=>' in " + scanner.wordArr[node.opcode])
+                        node.opcode = ERROR
+                        errorFlag = True
+                        return node
                 else:
-                    print("ERROR: Missing comma in " + opcode)
-                    return(ERROR, ERROR)
+                    print("ERROR " + str(node.linenum) + ": Missing second source register in" + scanner.wordArr[node.opcode])
+                    node.opcode = ERROR
+                    errorFlag = True
+                    return node
             else:
-                print("ERROR: Missing first source register in " + opcode)
-                return(ERROR, ERROR)
-        elif word[0] == OUTPUT:
-            opcode = Scanner.categoryArr[word[1]]
-            word = Scanner.readWord()
-            if word[0] == CONSTANT:
-                sr1 = "val " + str(word[1])
-                word = Scanner.readWord()
-                if word[0] == EOL:
-                    return (opcode, sr1, sr2, sr3)
-                else:
-                    print("ERROR: Extra words in " + str(self.opcode) + " operation")
-                    return(ERROR, ERROR)
-            else:
-                print("ERROR: Missing constant in " + opcode)
-                return(ERROR, ERROR)
-        elif word[0] == NOP:
-            opcode = Scanner.categoryArr[word[1]]
-            word = Scanner.readWord()
+                print("ERROR " + str(node.linenum) + ": Missing comma in " + scanner.wordArr[node.opcode])
+                node.opcode = ERROR
+                errorFlag = True
+                return node
+        else:
+            print("ERROR " + str(node.linenum) + ": Missing first source register in " + scanner.wordArr[node.opcode])
+            node.opcode = ERROR
+            errorFlag = True
+            return node
+    elif word[0] == OUTPUT:
+        node.opcode = word[1]
+        word = scanner.readWord()
+        if word[0] == CONSTANT:
+            node.sr1 = word[1]
+            word = scanner.readWord()
             if word[0] == EOL:
-                return (opcode, sr1, sr2, sr3)
+                return node
             else:
-                print("ERROR: Extra words in " + str(self.opcode) + " operation")
-                return(ERROR, ERROR)
-        elif word[0] == ERROR:
-            return ("ERROR: Semantic error")
+                print("ERROR " + str(node.linenum) + ": Extra words in " + scanner.wordArr[node.opcode] + " operation")
+                node.opcode = ERROR
+                errorFlag = True
+                return node
+        else:
+            print("ERROR " + str(node.linenum) + ": Missing constant in " + scanner.wordArr[node.opcode])
+            node.opcode = ERROR
+            errorFlag = True
+            return node
+    elif word[0] == NOP:
+        node.opcode = word[1]
+        word = scanner.readWord()
+        if word[0] == EOL:
+            return (node)
+        else:
+            print("ERROR " + str(node.linenum) + ": Extra words in " + scanner.wordArr[node.opcode] + " operation")
+            node.opcode = ERROR
+            errorFlag = True
+            return node
+    elif word[0] == EOF:
+        node.opcode = EOF
+        return node
+    elif word[0] == ERROR:
+        # We don't print errors twice
+        node.opcode = ERROR
+        errorFlag = True
+        return node
+    else:
+        print("ERROR  " + str(node.linenum) + ": Invalid starting part of speech, " + scanner.categoryArr[word[0]])
+        node.opcode = ERROR
+        errorFlag = True
+        return node
+    
             
             
 def h_flag(filename):
@@ -176,24 +238,59 @@ def s_flag(filename):
     scanner = Scanner(filename)
     scanner.readLine()
     nextWord = scanner.readWord()
-    while nextWord != (9,'EOF'):
+    while not scanner.getEOF():
         if (nextWord[0] == CONSTANT or nextWord[0] == REGISTER):
             print("Line " + str(scanner.linenum) + ": [" + scanner.categoryArr[nextWord[0]] + ", " + str(nextWord[1]) + "]")
         elif (nextWord[0] != ERROR):
             print("Line " + str(scanner.linenum) + ": [" + scanner.categoryArr[nextWord[0]] + ", " + scanner.wordArr[nextWord[1]] + "]")
         nextWord = scanner.readWord()
+    # print eof
+    print("Line " + str(scanner.linenum) + ": [" + scanner.categoryArr[nextWord[0]] + ", " + scanner.wordArr[nextWord[1]] + "]")
+
 
 def p_flag(filename):
     scanner = Scanner(filename)
     scanner.readLine()
-    nextWord = scanner.readWord()
-    while nextWord != (9, "EOF"):
+    ir = parseLine(scanner)
+    opcount = 0
+    is_error = False
+    while not scanner.getEOF():
+        if ir.getOpcode() != ERROR:
+            opcount += 1
+        else:
+            is_error = True
+        ir = parseLine(scanner)
         
-        parseLine(nextWord)
+    if is_error == True:
+        print("Parser found errors.")
+    else:
+        print("Parse succeeded. Processed " + str(opcount) + " operations.")
         
 
-def r_flag():
-    print("R flag worked")
+def r_flag(filename):
+    scanner = Scanner(filename)
+    scanner.readLine()
+    ir = parseLine(scanner)
+
+    is_error = False
+    head = IRNode(-1)
+    
+    while not scanner.getEOF():
+        if ir.getOpcode() != ERROR:
+            head.prev.insertAfter(ir)
+            
+        else:
+            is_error = True
+        ir = parseLine(scanner)
+        
+    if is_error == True:
+        print("Due to syntax errors, run terminates.")
+    else:
+        node = head
+        while (node.next != head):
+            print(node.next)
+            node = node.next
+    
     
 
 def main ():
@@ -204,7 +301,7 @@ def main ():
     if "-h" in argslst:
         h_flag(filename)
     elif "-r" in argslst:
-        r_flag()
+        r_flag(filename)
     elif "-p" in argslst:
         p_flag(filename)
     else:
