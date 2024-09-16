@@ -1,6 +1,7 @@
 from sys import argv
 from scanner import Scanner
 
+
 # Constants from other file
 SUB = 3
 STORE = 4
@@ -28,6 +29,103 @@ COMMENT = 11
 
 ERROR = -1
 
+def parseLine(linelst):
+    word = Scanner.readWord()
+    
+    while word != (9, "EOF"):
+        opcode = ""
+        sr1 = ""
+        sr2 = ""
+        sr3 = ""
+        if word[0] == MEMOP:
+            self.createIR()
+            opcode = Scanner.categoryArr[word[1]]
+            word = Scanner.readWord()
+            if word[0] == REGISTER:
+                self.sr1 = "sr" + str(word[1])
+                word = Scanner.readWord()
+                if word[0] == INTO:
+                    word = Scanner.readWord()
+                    if word[0] == REGISTER:
+                        self.sr3 = "sr" + str(word[1])
+                        return (opcode, sr1, sr2, sr3)
+                    else:
+                        print("ERROR: Missing second source register in " + str(self.opcode))
+                        return(ERROR, ERROR)
+                else:
+                    print("ERROR: Missing '=>' in " + str(self.opcode))
+                    return(ERROR, ERROR)
+            else:
+                print("ERROR: missing first source register in " + str(self.opcode))
+                return(ERROR, ERROR)
+        elif word[0] == LOADI:
+            opcode = Scanner.categoryArr[word[1]]
+            word = Scanner.readWord()
+            if word[0] == CONSTANT:
+                sr1 = "val " + str(word[1])
+                word = Scanner.readWord()
+                if word[0] == INTO:
+                    word = Scanner.readWord()
+                    if word[0] == REGISTER:
+                        sr3 = "sr" + str(word[1])
+                        return (opcode, sr1, sr2, sr3)
+                    else:
+                        print("ERROR: Missing second source register in " + str(self.opcode))
+                        return(ERROR, ERROR)
+                else:
+                    print("ERROR: Missing '=>' in " + str(self.opcode))
+                    return(ERROR, ERROR)
+            else:
+                print("ERROR: missing first source register in " + str(self.opcode))
+                return(ERROR, ERROR)
+        elif word[0] == ARITHOP:
+            opcode = Scanner.categoryArr[word[1]]
+            word = Scanner.readWord()
+            if word[0] == REGISTER:
+                sr1 = "sr" + str(word[1])
+                word = Scanner.readWord()
+                if word[0] == COMMA:
+                    word = Scanner.readWord()
+                    if word[0] == REGISTER:
+                        sr2 = "sr" + str(word[1])
+                        word = Scanner.readWord()
+                        if word[0] == INTO:
+                            word = Scanner.readWord()
+                            if word[0] == REGISTER:
+                                sr3 = "sr" + str(word[1])
+                                return (opcode, sr1, sr2, sr3)
+                            else:
+                                print("ERROR: Missing third source register in +" + self.opcode)
+                                return(ERROR, ERROR)
+                        else:
+                            print("ERROR: Missing '=>' in " + self.opcode)
+                            return(ERROR, ERROR)
+                    else:
+                        print("ERROR: Missing second source register in" + self.opcode)
+                        return(ERROR, ERROR)
+                else:
+                    print("ERROR: Missing comma in " + self.opcode)
+                    return(ERROR, ERROR)
+            else:
+                print("ERROR: Missing first source register in " + self.opcode)
+                return(ERROR, ERROR)
+        elif word[0] == OUTPUT:
+            opcode = Scanner.categoryArr[word[1]]
+            word = Scanner.readWord()
+            if word[0] == CONSTANT:
+                sr1 = "val " + str(word[1])
+                return (opcode, sr1, sr2, sr3)
+            else:
+                print("ERROR: Missing constant in " + self.opcode)
+                return(ERROR, ERROR)
+        elif word[0] == NOP:
+            opcode = Scanner.categoryArr[word[1]]
+            return (opcode, sr1, sr2, sr3)
+                    
+                
+                 
+                
+            
 def h_flag(filename):
     print("Valid Command Line Arguments:")
     print("\n")
@@ -50,9 +148,17 @@ def s_flag(filename):
             print("[" + scanner.categoryArr[nextWord[0]] + ", " + scanner.wordArr[nextWord[1]] + "]")
         nextWord = scanner.readWord()
 
-def p_flag():
-    print("P flag worked")
-
+def p_flag(filename):
+    scanner = Scanner(filename)
+    scanner.readLine()
+    nextWord = scanner.readWord()
+    linewords = []
+    while nextWord != (9, "EOF"):
+        while nextWord != (EOL, EOL):
+            linewords.append(nextWord)
+            nextWord = scanner.nextWord
+        parseLine(linewords)
+        
 
 def r_flag():
     print("R flag worked")
@@ -68,9 +174,11 @@ def main ():
     elif "-r" in argslst:
         r_flag()
     elif "-p" in argslst:
-        p_flag()
+        p_flag(filename)
     else:
         s_flag(filename)
         
 if __name__ == "__main__":
     main()
+    
+    
