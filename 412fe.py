@@ -1,5 +1,6 @@
 from sys import argv
 from scanner import Scanner
+import os
 
 
 # Constants from other file
@@ -234,7 +235,6 @@ def h_flag(filename):
 
 
 def s_flag(filename):
-    print("S flag flagged")
     scanner = Scanner(filename)
     scanner.readLine()
     nextWord = scanner.readWord()
@@ -296,6 +296,9 @@ def r_flag(filename):
 def main ():
     argslst = argv
     filename = argslst[-1]
+    if os.path.exists(filename) == False:
+        print("ERROR: file does not exists or filepath is missing")
+        return (ERROR, ERROR)
     if len(argslst) > 3:
         print("ERROR: more than one flag present. Highest priority flag will be implemented")
     if "-h" in argslst:
