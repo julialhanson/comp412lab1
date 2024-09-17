@@ -74,7 +74,7 @@ class Scanner():
                     self.readLine()
                     return (EOL, EOL)
                 else:
-                    print("ERROR: " + str(self.linenum) + "\\r must be followed by \\n.")
+                    print("ERROR: " + str(self.linenum) + "\\r must be followed by \\n.", file=sys.stderr)
                     self.readLine()
                     return (ERROR, ERROR)
             self.i += 1
@@ -95,11 +95,11 @@ class Scanner():
                     if self.line[self.i].isspace():
                         return (ARITHOP, SUB)
                     else:
-                        print("ERROR " + str(self.linenum) + ": sub" + self.line[self.i] + " is not a valid string")
+                        print("ERROR " + str(self.linenum) + ": sub" + self.line[self.i] + " is not a valid string", file=sys.stderr)
                         self.readLine()
                         return(ERROR, ERROR)
                 else:
-                    print("ERROR " + str(self.linenum) + ": su" + self.line[self.i] + " is not a valid string")
+                    print("ERROR " + str(self.linenum) + ": su" + self.line[self.i] + " is not a valid string", file=sys.stderr)
                     self.readLine()
                     return(ERROR, ERROR)
             elif self.line[self.i] == 't':
@@ -113,23 +113,23 @@ class Scanner():
                             if self.line[self.i].isspace():
                                 return (MEMOP, STORE)
                             else: 
-                                print("ERROR " + str(self.linenum) + ": store" + self.line[self.i] + " is not a valid string")
+                                print("ERROR " + str(self.linenum) + ": store" + self.line[self.i] + " is not a valid string", file=sys.stderr)
                                 self.readLine()
                                 return(ERROR, ERROR)
                         else:
-                            print("ERROR " + str(self.linenum) + ": stor" + self.line[self.i] + " is not a valid string")
+                            print("ERROR " + str(self.linenum) + ": stor" + self.line[self.i] + " is not a valid string", file=sys.stderr)
                             self.readLine()
                             return(ERROR, ERROR)
                     else:
-                        print("ERROR " + str(self.linenum) + ": sto" + self.line[self.i] + " is not a valid string")
+                        print("ERROR " + str(self.linenum) + ": sto" + self.line[self.i] + " is not a valid string", file=sys.stderr)
                         self.readLine()
                         return(ERROR, ERROR)
                 else:
-                    print("ERROR " + str(self.linenum) + ": st" + self.line[self.i] + " is not a valid string")
+                    print("ERROR " + str(self.linenum) + ": st" + self.line[self.i] + " is not a valid string", file=sys.stderr)
                     self.readLine()
                     return(ERROR, ERROR)
             else:
-                print("ERROR " + str(self.linenum) + ": s" + self.line[self.i] + " is not a valid string")
+                print("ERROR " + str(self.linenum) + ": s" + self.line[self.i] + " is not a valid string", file=sys.stderr)
                 self.readLine()
                 return(ERROR, ERROR)
         # handling words lshift, loadI, load
@@ -148,23 +148,23 @@ class Scanner():
                                 if self.line[self.i].isspace():
                                     return (ARITHOP, LSHIFT)
                                 else: 
-                                    print("ERROR " + str(self.linenum) + ": lshift" + self.line[self.i] + " is not a valid string")
+                                    print("ERROR " + str(self.linenum) + ": lshift" + self.line[self.i] + " is not a valid string", file=sys.stderr)
                                     self.readLine()
                                     return(ERROR, ERROR)
                             else:
-                                print("ERROR " + str(self.linenum) + ": lshif" + self.line[self.i] + " is not a valid string")
+                                print("ERROR " + str(self.linenum) + ": lshif" + self.line[self.i] + " is not a valid string", file=sys.stderr)
                                 self.readLine()
                                 return(ERROR, ERROR)
                         else:
-                            print("ERROR " + str(self.linenum) + ": lshi" + self.line[self.i] + " is not a valid string")
+                            print("ERROR " + str(self.linenum) + ": lshi" + self.line[self.i] + " is not a valid string", file=sys.stderr)
                             self.readLine()
                             return(ERROR, ERROR)
                     else:
-                        print("ERROR " + str(self.linenum) + ": lsh" + self.line[self.i] + " is not a valid string")
+                        print("ERROR " + str(self.linenum) + ": lsh" + self.line[self.i] + " is not a valid string", file=sys.stderr)
                         self.readLine()
                         return(ERROR, ERROR)
                 else:
-                    print("ERROR " + str(self.linenum) + ": ls" + self.line[self.i] + " is not a valid string")
+                    print("ERROR " + str(self.linenum) + ": ls" + self.line[self.i] + " is not a valid string", file=sys.stderr)
                     self.readLine()
                     return(ERROR, ERROR)
             elif self.line[self.i] == 'o':
@@ -178,25 +178,25 @@ class Scanner():
                             if self.line[self.i].isspace():
                                 return (LOADI, LOADI)
                             else:
-                                print("ERROR " + str(self.linenum) + ": loadI" + self.line[self.i] + " is not a valid string")
+                                print("ERROR " + str(self.linenum) + ": loadI" + self.line[self.i] + " is not a valid string", file=sys.stderr)
                                 self.readLine()
                                 return(ERROR, ERROR)
                         elif self.line[self.i].isspace():
                             return (MEMOP, LOAD)
                         else:
-                            print("ERROR " + str(self.linenum) + ": load" + self.line[self.i] + " is not a valid string")
+                            print("ERROR " + str(self.linenum) + ": load" + self.line[self.i] + " is not a valid string", file=sys.stderr)
                             self.readLine()
                             return(ERROR, ERROR)
                     else:
-                        print("ERROR " + str(self.linenum) + ": loa" + self.line[self.i] + " is not a valid string")
+                        print("ERROR " + str(self.linenum) + ": loa" + self.line[self.i] + " is not a valid string"), file=sys.stderr
                         self.readLine()
                         return(ERROR, ERROR)
                 else:
-                    print("ERROR " + str(self.linenum) + ": lo" + self.line[self.i] + " is not a valid string")
+                    print("ERROR " + str(self.linenum) + ": lo" + self.line[self.i] + " is not a valid string", file=sys.stderr)
                     self.readLine()
                     return(ERROR, ERROR)
             else: 
-                print("ERROR " + str(self.linenum) + ": l" + self.line[self.i] + " is not a valid string")
+                print("ERROR " + str(self.linenum) + ": l" + self.line[self.i] + " is not a valid string", file=sys.stderr)
                 self.readLine()
                 return(ERROR, ERROR)
         #handling rshift and registers
@@ -215,23 +215,23 @@ class Scanner():
                                 if self.line[self.i].isspace():
                                     return (ARITHOP, RSHIFT)
                                 else: 
-                                    print("ERROR " + str(self.linenum) + ": rshift" + self.line[self.i] + " is not a valid string")
+                                    print("ERROR " + str(self.linenum) + ": rshift" + self.line[self.i] + " is not a valid string", file=sys.stderr)
                                     self.readLine()
                                     return(ERROR, ERROR)
                             else:
-                                print("ERROR " + str(self.linenum) + ": rshif" + self.line[self.i] + " is not a valid string")
+                                print("ERROR " + str(self.linenum) + ": rshif" + self.line[self.i] + " is not a valid string", file=sys.stderr)
                                 self.readLine()
                                 return(ERROR, ERROR)
                         else:
-                            print("ERROR " + str(self.linenum) + ": rshi" + self.line[self.i] + " is not a valid string")
+                            print("ERROR " + str(self.linenum) + ": rshi" + self.line[self.i] + " is not a valid string", file=sys.stderr)
                             self.readLine()
                             return(ERROR, ERROR)
                     else:
-                        print("ERROR " + str(self.linenum) + ": rsh" + self.line[self.i] + " is not a valid string")
+                        print("ERROR " + str(self.linenum) + ": rsh" + self.line[self.i] + " is not a valid string", file=sys.stderr)
                         self.readLine()
                         return(ERROR, ERROR)
                 else:
-                    print("ERROR " + str(self.linenum) + ": rs" + self.line[self.i] + " is not a valid string")
+                    print("ERROR " + str(self.linenum) + ": rs" + self.line[self.i] + " is not a valid string", file=sys.stderr)
                     self.readLine()
                     return(ERROR, ERROR)
             #handling consonants
@@ -242,7 +242,7 @@ class Scanner():
                     self.i += 1
                 return(REGISTER, int(regstr))
             else:
-                print("ERROR " + str(self.linenum) + ": r" + self.line[self.i] + " is not a valid string")
+                print("ERROR " + str(self.linenum) + ": r" + self.line[self.i] + " is not a valid string", file=sys.stderr)
                 self.readLine()
                 return(ERROR, ERROR)
         elif self.line[self.i] == 'm':
@@ -256,19 +256,19 @@ class Scanner():
                         if self.line[self.i].isspace():
                             return (ARITHOP, MULT)
                         else:
-                            print("ERROR " + str(self.linenum) + ": mult" + self.line[self.i] + " is not a valid string")
+                            print("ERROR " + str(self.linenum) + ": mult" + self.line[self.i] + " is not a valid string", file=sys.stderr)
                             self.readLine()
                             return(ERROR, ERROR)
                     else:
-                        print("ERROR " + str(self.linenum) + ": mul" + self.line[self.i] + " is not a valid string")
+                        print("ERROR " + str(self.linenum) + ": mul" + self.line[self.i] + " is not a valid string", file=sys.stderr)
                         self.readLine()
                         return(ERROR, ERROR)
                 else:
-                    print("ERROR " + str(self.linenum) + ": mu" + self.line[self.i] + " is not a valid string")
+                    print("ERROR " + str(self.linenum) + ": mu" + self.line[self.i] + " is not a valid string", file=sys.stderr)
                     self.readLine()
                     return(ERROR, ERROR)
             else:
-                print("ERROR " + str(self.linenum) + ": m" + self.line[self.i] + " is not a valid string")
+                print("ERROR " + str(self.linenum) + ": m" + self.line[self.i] + " is not a valid string", file=sys.stderr)
                 self.readLine()
                 return(ERROR, ERROR)
         elif self.line[self.i] == 'a':
@@ -280,15 +280,15 @@ class Scanner():
                     if self.line[self.i].isspace():
                         return (ARITHOP, ADD)
                     else:
-                        print("ERROR " + str(self.linenum) + ": add" + self.line[self.i] + " is not a valid string")
+                        print("ERROR " + str(self.linenum) + ": add" + self.line[self.i] + " is not a valid string", file=sys.stderr)
                         self.readLine()
                         return(ERROR, ERROR)
                 else:
-                    print("ERROR " + str(self.linenum) + ": ad" + self.line[self.i] + " is not a valid string")
+                    print("ERROR " + str(self.linenum) + ": ad" + self.line[self.i] + " is not a valid string", file=sys.stderr)
                     self.readLine()
                     return(ERROR, ERROR)
             else:
-                print("ERROR " + str(self.linenum) + ": a" + self.line[self.i] + " is not a valid string")
+                print("ERROR " + str(self.linenum) + ": a" + self.line[self.i] + " is not a valid string", file=sys.stderr)
                 self.readLine()
                 return(ERROR, ERROR)
         elif self.line[self.i] == 'n':
@@ -300,15 +300,15 @@ class Scanner():
                     if self.line[self.i].isspace():
                         return (NOP, NOP)
                     else:
-                        print("ERROR " + str(self.linenum) + ": nop" + self.line[self.i] + " is not a valid string")
+                        print("ERROR " + str(self.linenum) + ": nop" + self.line[self.i] + " is not a valid string", file=sys.stderr)
                         self.readLine()
                         return(ERROR, ERROR)
                 else:
-                    print("ERROR " + str(self.linenum) + ": no" + self.line[self.i] + " is not a valid string")
+                    print("ERROR " + str(self.linenum) + ": no" + self.line[self.i] + " is not a valid string", file=sys.stderr)
                     self.readLine()
                     return(ERROR, ERROR)
             else:
-                print("ERROR " + str(self.linenum) + ": n" + self.line[self.i] + " is not a valid string")
+                print("ERROR " + str(self.linenum) + ": n" + self.line[self.i] + " is not a valid string", file=sys.stderr)
                 self.readLine()
                 return(ERROR, ERROR)
         elif self.line[self.i] == 'o':
@@ -326,27 +326,27 @@ class Scanner():
                                 if self.line[self.i].isspace():
                                     return (OUTPUT, OUTPUT)
                                 else:
-                                    print("ERROR " + str(self.linenum) + ": output" + self.line[self.i] + " is not a valid string")
+                                    print("ERROR " + str(self.linenum) + ": output" + self.line[self.i] + " is not a valid string", file=sys.stderr)
                                     self.readLine()
                                     return(ERROR, ERROR)
                             else:
-                                print("ERROR " + str(self.linenum) + ": outpu" + self.line[self.i] + " is not a valid string")
+                                print("ERROR " + str(self.linenum) + ": outpu" + self.line[self.i] + " is not a valid string", file=sys.stderr)
                                 self.readLine()
                                 return(ERROR, ERROR)
                         else:
-                            print("ERROR " + str(self.linenum) + ": outp" + self.line[self.i] + " is not a valid string")
+                            print("ERROR " + str(self.linenum) + ": outp" + self.line[self.i] + " is not a valid string", file=sys.stderr)
                             self.readLine()
                             return(ERROR, ERROR)
                     else:
-                        print("ERROR " + str(self.linenum) + ": out" + self.line[self.i] + " is not a valid string")
+                        print("ERROR " + str(self.linenum) + ": out" + self.line[self.i] + " is not a valid string", file=sys.stderr)
                         self.readLine()
                         return(ERROR, ERROR)
                 else:
-                    print("ERROR " + str(self.linenum) + ": ou" + self.line[self.i] + " is not a valid string")
+                    print("ERROR " + str(self.linenum) + ": ou" + self.line[self.i] + " is not a valid string", file=sys.stderr)
                     self.readLine()
                     return(ERROR, ERROR)
             else:
-                print("ERROR " + str(self.linenum) + ": o" + self.line[self.i] + " is not a valid string")
+                print("ERROR " + str(self.linenum) + ": o" + self.line[self.i] + " is not a valid string", file=sys.stderr)
                 self.readLine()
                 return(ERROR, ERROR)
         elif self.line[self.i] == '=':
@@ -363,7 +363,7 @@ class Scanner():
                 self.readLine()
                 return (EOL, EOL)
             else:
-                print("ERROR " + str(self.linenum) + ": / must be followed by another /")
+                print("ERROR " + str(self.linenum) + ": / must be followed by another /", file=sys.stderr)
                 self.readLine()
                 return (ERROR, ERROR)
         elif self.line[self.i] == '\n':
@@ -383,7 +383,7 @@ class Scanner():
                            
         else:
             # print(self.line[self.i])
-            print("ERROR " + str(self.linenum) + ": " + self.line[self.i] + " is not a valid starting character")
+            print("ERROR " + str(self.linenum) + ": " + self.line[self.i] + " is not a valid starting character", file=sys.stderr)
             self.readLine()
             return(ERROR, ERROR)
     

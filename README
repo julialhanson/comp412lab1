@@ -1,2 +1,10 @@
 Name: Julia Hanson
 NetID: jlh28
+
+This program is a parser and scanner for ILOC blocks of code. There is a script file '412fe', the main file '412fe.py' which contains the main function and the parser, and 'scanner.py' which contains the scanner functions. Here are the flag options for this program:
+
+-h: produces a list of valid command-line arguments and includes descriptions of all command-line arguments"
+-r: reads the file specified by <name>, scans, parses, builds the IR, and prints the information in the IR"
+-p: the default behavior, reads the file specified by <name>, scans, parses, builds the IR, and reports success or errors found in the input file. If the parse succeeds, the front end must report “Parse succeeded. Processed k operations.”, where k is the number of operations the front end handled, printed without commas. If it finds errors, it must print “Parse found errors.”"
+-s: reads the file specified by <name> and prints a list of the tokens that the scanner found to the standard output stream"
+
