@@ -188,7 +188,7 @@ class Scanner():
                             self.readLine()
                             return(ERROR, ERROR)
                     else:
-                        print("ERROR " + str(self.linenum) + ": loa" + self.line[self.i] + " is not a valid string"), file=sys.stderr
+                        print("ERROR " + str(self.linenum) + ": loa" + self.line[self.i] + " is not a valid string", file=sys.stderr)
                         self.readLine()
                         return(ERROR, ERROR)
                 else:
