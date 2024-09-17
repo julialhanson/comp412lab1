@@ -1,5 +1,5 @@
-Name: Julia Hanson
-NetID: jlh28
+//NAME: Julia Hanson
+//NETID: jlh28
 
 This program is a parser and scanner for ILOC blocks of code. There is a script file '412fe', the main file '412fe.py' which contains the main function and the parser, and 'scanner.py' which contains the scanner functions. Here are the flag options for this program:
 
